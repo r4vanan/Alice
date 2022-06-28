@@ -2,6 +2,9 @@
 import requests
 import json
 from google_speech import Speech
+import speech_recognition as sr 
+
+r = sr.Recognizer()
 
 def speak(alice_speech):
     lang = "en-us"
@@ -48,8 +51,15 @@ def question(quest):
 #created main for looping the query
 def main():
     while(True):
-        qu=input("alice =>")
-        question(qu)
+        with sr.Microphone() as source:
+            print("talk")
+            audio_text = r.listen(source, phrase_time_limit=10)
+            print("time over")
+            try:
+                question(r.recognize_google(audio_text, language="en-us"))
+            except:
+                speak("sorry cant understand!!")
+
         
 
 if __name__ == "__main__":
